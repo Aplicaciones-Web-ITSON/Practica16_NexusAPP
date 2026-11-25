@@ -1,48 +1,26 @@
 package com.example.Nexus.dto;
 
 import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 /**
- * ============================================================
- *  CommentRequest — DTO para crear un nuevo comentario
- * ============================================================
+ * Datos que el cliente envía para comentar un post.
  *
- * El cliente envía un JSON con esta estructura:
- * {
- *   "text":   "¡Excelente post!",
- *   "postId": 1,
- *   "userId": 2
- * }
+ * { "postId": 1, "text": "Buen post", "userId": 2 }
  *
- * Spring mapea automáticamente ese JSON a este objeto cuando
- * el controlador usa la anotación @RequestBody.
- *
- * @Data → Lombok genera getters/setters.
+ * ⚠ El userId lo decide el cliente: puede comentar a nombre de
+ * cualquiera. En la versión JWT este campo se elimina.
  */
 @Data
 public class CommentRequest {
 
-    /**
-     * Texto del comentario. Campo obligatorio.
-     *
-     * @NotBlank → Spring valida que el campo no sea nulo ni esté vacío.
-     *             Si falla, responde automáticamente con 400 Bad Request.
-     */
     @NotBlank(message = "El texto es obligatorio")
     private String text;
 
-    /**
-     * ID del post al que pertenece el comentario.
-     * El servicio lo usará para buscar el Post en la BD y asociarlo.
-     */
+    @NotNull(message = "El postId es obligatorio")
     private Long postId;
 
-    /**
-     * ID del usuario que escribe el comentario.
-     *
-     * Nota académica: igual que en PostRequest, en un sistema real
-     * con JWT este ID vendría del token de autenticación, no del body.
-     */
-    private Long userId; // Para simular el usuario antes de JWT
+    @NotNull(message = "El userId es obligatorio")
+    private Long userId;
 }
